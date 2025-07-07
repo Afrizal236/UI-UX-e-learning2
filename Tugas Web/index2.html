@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #121212;
+            color: #f5f5f5;
+            line-height: 1.6;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-header h1 {
+            color: #bb86fc;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .login-header p {
+            color: #a0a0a0;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #bb86fc;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 5px;
+            border: 1px solid #333;
+            background-color: #2d2d2d;
+            color: #f5f5f5;
+            font-size: 16px;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #bb86fc;
+            box-shadow: 0 0 5px rgba(187, 134, 252, 0.5);
+        }
+        
+        select {
+            cursor: pointer;
+        }
+        
+        .btn-login {
+            background-color: #bb86fc;
+            color: #121212;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-login:hover {
+            background-color: #a370d8;
+        }
+        
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .remember {
+            display: flex;
+            align-items: center;
+        }
+        
+        .remember input[type="checkbox"] {
+            width: auto;
+            margin-right: 5px;
+        }
+        
+        .forgot a {
+            color: #bb86fc;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .forgot a:hover {
+            text-decoration: underline;
+        }
+        
+        .register-link {
+            text-align: center;
+            margin-top: 30px;
+            color: #a0a0a0;
+        }
+        
+        .register-link a {
+            color: #bb86fc;
+            text-decoration: none;
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #444;
+        }
+        
+        .divider span {
+            padding: 0 10px;
+            color: #a0a0a0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-header">
+            <h1>Login</h1>
+            <p>Masukkan username dan password untuk mengakses akun Anda</p>
+        </div>
+        
+        <form action="#" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required placeholder="Masukkan username Anda">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Masukkan password Anda">
+            </div>
+        
+            
+            <div class="remember-forgot">
+                <div class="remember">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember" style="color: #a0a0a0; margin-bottom: 0;">Ingat saya</label>
+                </div>
+                <div class="forgot">
+                    <a href="#">Lupa password?</a>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-login">Masuk</button>
+            
+            <div class="divider">
+                <span>ATAU</span>
+            </div>
+            
+            <div class="register-link">
+                <p>Belum memiliki akun? <a href="register.html">Daftar sekarang</a></p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Script untuk menghubungkan halaman login dan register
+        document.addEventListener('DOMContentLoaded', function() {
+            // Link register pada halaman login (index2.html)
+            const registerLink = document.querySelector('.register-link a');
+            if(registerLink) {
+                registerLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Mengarahkan ke halaman register (index.html)
+                    window.location.href = 'index.html';
+                });
+            }
+            
+            // Menangani submisi form login
+            const loginForm = document.querySelector('form');
+            if(loginForm) {
+                loginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Validasi input dasar
+                    const username = document.getElementById('username').value;
+                    const password = document.getElementById('password').value;
+                    const selectedRole = document.getElementById('role').value;
+                    
+                    if(!username || !password || !selectedRole) {
+                        alert('Mohon lengkapi semua field!');
+                        return;
+                    }
+                    
+                    // Jika login sebagai murid, arahkan ke halaman murid
+                    if(selectedRole === 'murid') {
+                        window.location.href = 'index3.html';
+                    } else {
+                        // Untuk role lain, tampilkan pesan bahwa halaman belum tersedia
+                        alert('Halaman untuk ' + selectedRole + ' belum tersedia.');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

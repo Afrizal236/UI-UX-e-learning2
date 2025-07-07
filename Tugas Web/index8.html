@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RuangRamy - Pembayaran</title>
+    <style>
+        :root {
+            --primary-color: #9d7cff;
+            --secondary-color: #8a5cf7;
+            --dark-bg: #121212;
+            --card-bg: #1e1e1e;
+            --kartu-bg: #2C2C2C;
+            --text-light: #e0e0e0;
+            --text-gray: #aaaaaa;
+            --success-color: #4CAF50;
+            --danger-color: #f44336;
+            --warning-color: #ff9800;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid #333;
+            position: sticky;
+            top: 0;
+            background-color: var(--dark-bg);
+            z-index: 1000;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 40px 0;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-align: center;
+            padding-top: 20px;
+        }
+        
+        /* Cart Styles */
+        .cart-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .cart-items {
+            flex: 2;
+            min-width: 300px;
+        }
+        
+        .cart-summary {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+        
+        .cart-item {
+            display: flex;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .item-image {
+            width: 80px;
+            height: 80px;
+            background-color: #333;
+            border-radius: 5px;
+            margin-right: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .item-details {
+            flex: 1;
+        }
+        
+        .item-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .item-description {
+            color: var(--text-gray);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .item-price {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .remove-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .summary-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: var(--text-gray);
+        }
+        
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .checkout-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px;
+            width: 100%;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .checkout-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        /* Store Styles */
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .store-item {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .store-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .store-item-thumbnail {
+            height: 160px;
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .store-item-info {
+            padding: 15px;
+        }
+        
+        .store-item-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .store-item-description {
+            color: var(--text-gray);
+            font-size: 14px;
+            margin-bottom: 15px;
+            height: 60px;
+            overflow: hidden;
+        }
+        
+        .store-item-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .store-item-price {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .add-to-cart-btn, .buy-now-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        .add-to-cart-btn:hover, .buy-now-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .store-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* Payment Form */
+        .payment-form {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: var(--text-light);
+        }
+        
+        .payment-methods {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .payment-method {
+            flex: 1;
+            min-width: 100px;
+            background-color: #333;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .payment-method.active {
+            background-color: var(--primary-color);
+        }
+        
+        .payment-method img {
+            height: 30px;
+            margin-bottom: 10px;
+        }
+        
+        /* Alert Styles */
+        .alert {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .alert-success {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+        
+        .alert-warning {
+            background-color: rgba(255, 152, 0, 0.2);
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-gray);
+        }
+        
+        .success-icon {
+            font-size: 50px;
+            color: var(--success-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .modal-message {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--text-gray);
+        }
+        
+        .modal-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .modal-button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        /* Cart Badge */
+        .cart-icon {
+            position: relative;
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--danger-color);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .tab-nav {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .tab-button {
+            padding: 12px 20px;
+            background-color: transparent;
+            border: none;
+            color: var(--text-gray);
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab-button.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Login/Logout buttons */
+        .login-btn, .logout-btn {
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: opacity 0.3s;
+            text-decoration: none;
+        }
+
+        .login-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .logout-btn {
+            background-color: #d32f2f;
+            color: white;
+        }
+
+        .login-btn:hover, .logout-btn:hover {
+            opacity: 0.9;
+            color: white;
+        }
+
+
+        /* Direct Buy Modal */
+        #directBuyModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quick-buy-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .item-preview {
+            background-color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cart-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .nav-links.active {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background-color: var(--dark-bg);
+                padding: 20px;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            }
+            
+            .menu-toggle {
+                display: block;
+                background: none;
+                border: none;
+                color: var(--text-light);
+                font-size: 24px;
+                cursor: pointer;
+            }
+
+            .store-item-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">RuangRamy.</div>
+                <div class="nav-links">
+                    <a href="index3.html" class="beranda-btn">Beranda</a>
+                    <a href="index3.html#materi" class="materi-btn">Materi</a>
+                    <a href="index3.html#video" class="video-btn">Video</a>
+                    <a href="index3.html#mentors" class="mentors-btn">Mentor</a>
+                    <a href="index3.html#partners" class="partners-btn">Partners</a>
+                    <a href="index3.html#kontak" class="kontak-btn">Kontak</a>
+                    <a href="#" class="cart-icon" id="keranjang"><i class="fas fa-shopping-cart"></i> Keranjang <span class="cart-badge" id="cartBadge">0</span></a>
+                    <a href="#login" class="login-btn">Log In</a>
+                    <a href="#logout" class="logout-btn">Log Out</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h2 class="section-title">Portal Pembelajaran</h2>
+            
+            <div class="tab-nav">
+                <button class="tab-button active" data-tab="store" onclick="showTab('store')">Katalog</button>
+                <button class="tab-button" data-tab="cart" onclick="showTab('cart')">Keranjang (<span id="cartCount">0</span>)</button>
+                <button class="tab-button" data-tab="checkout" onclick="showTab('checkout')">Pembayaran</button>
+            </div>
+            
+            <!-- Store Tab -->
+            <div class="tab-content active" id="store">
+                <h3 class="section-title">Materi Pembelajaran</h3>
+                <div class="store-grid">
+                    <div class="store-item" data-id="m1" data-type="materi" data-price="75000">
+                        <div class="store-item-thumbnail">PDF</div>
+                        <div class="store-item-info">
+                            <h3 class="store-item-title">Modul Penalaran Matematika SNBT</h3>
+                            <p class="store-item-description">Kumpulan rumus dan latihan soal matematika untuk persiapan SNBT</p>
+                            <div class="store-item-bottom">
+                                <span class="store-item-price">Rp 75.000</span>
+                                <div class="store-item-actions">
+                                    <button class="add-to-cart-btn" onclick="addToCart('m1', 'Modul Penalaran Matematika SNBT', 'Kumpulan rumus dan latihan soal matematika', 75000, 'materi')">+ Keranjang</button>
+                                    <button class="buy-now-btn" onclick="buyNow('m1', 'Modul Penalaran Matematika SNBT', 'Kumpulan rumus dan latihan soal matematika', 75000, 'materi')">Beli Sekarang</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="store-item" data-id="m2" data-type="materi" data-price="65000">
+                        <div class="store-item-thumbnail">PDF</div>
+                        <div class="store-item-info">
+                            <h3 class="store-item-title">Modul Literasi Bahasa Indonesia</h3>
+                            <p class="store-item-description">Latihan membaca cepat dan memahami struktur teks</p>
+                            <div class="store-item-bottom">
+                                <span class="store-item-price">Rp 65.000</span>
+                                <div class="store-item-actions">
+                                    <button class="add-to-cart-btn" onclick="addToCart('m2', 'Modul Literasi Bahasa Indonesia', 'Latihan membaca cepat dan memahami struktur teks', 65000, 'materi')">+ Keranjang</button>
+                                    <button class="buy-now-btn" onclick="buyNow('m2', 'Modul Literasi Bahasa Indonesia', 'Latihan membaca cepat dan memahami struktur teks', 65000, 'materi')">Beli Sekarang</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="store-item" data-id="m3" data-type="materi" data-price="70000">
+                        <div class="store-item-thumbnail">PDF</div>
+                        <div class="store-item-info">
+                            <h3 class="store-item-title">Modul Penalaran Umum</h3>
+                            <p class="store-item-description">Teknik mengerjakan soal logika, silogisme, dan analogi</p>
+                            <div class="store-item-bottom">
+                                <span class="store-item-price">Rp 70.000</span>
+                                <div class="store-item-actions">
+                                    <button class="add-to-cart-btn" onclick="addToCart('m3', 'Modul Penalaran Umum', 'Teknik mengerjakan soal logika, silogisme, dan analogi', 70000, 'materi')">+ Keranjang</button>
+                                    <button class="buy-now-btn" onclick="buyNow('m3', 'Modul Penalaran Umum', 'Teknik mengerjakan soal logika, silogisme, dan analogi', 70000, 'materi')">Beli Sekarang</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="store-item" data-id="m4" data-type="materi" data-price="75000">
+                        <div class="store-item-thumbnail">PDF</div>
+                        <div class="store-item-info">
+                            <h3 class="store-item-title">Modul Literasi Bahasa Inggris</h3>
+                            <p class="store-item-description">Strategi mengerjakan soal reading comprehension</p>
+                            <div class="store-item-bottom">
+                                <span class="store-item-price">Rp 75.000</span>
+                                <div class="store-item-actions">
+                                    <button class="add-to-cart-btn" onclick="addToCart('m4', 'Modul Literasi Bahasa Inggris', 'Strategi mengerjakan soal reading comprehension', 75000, 'materi')">+ Keranjang</button>
+                                    <button class="buy-now-btn" onclick="buyNow('m4', 'Modul Literasi Bahasa Inggris', 'Strategi mengerjakan soal reading comprehension', 75000, 'materi')">Beli Sekarang</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="section-title">Video Pembelajaran</h3>
+                <div class="store-grid">
+                    <div class="store-item" data-id="v1" data-type="video" data-price="120000">
+                        <div class="store-item-thumbnail">VIDEO</div>
+                        <div class="store-item-info">
+                            <h3 class="store-item-title">Tips & Trik Soal Matematika</h3>
+                            <p class="store-item-description">Strategi cepat mengerjakan soal matematika SNBT dengan metode praktis</p>
+                            <div class="store-item-bottom">
+                                <span class="store-item-price">Rp 120.000</span>
+                                <div class="store-item-actions">
+                                    <button class="add-to-cart-btn" onclick="addToCart('v1', 'Tips & Trik Soal Matematika', 'Strategi cepat mengerjakan soal matematika SNBT', 120000, 'video')">+ Keranjang</button>
+                                    <button class="buy-now-btn" onclick="buyNow('v1', 'Tips & Trik Soal Matematika', 'Strategi cepat mengerjakan soal matematika SNBT', 120000, 'video')">Beli Sekarang</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="store-item" data-id="v2" data-type="video" data-price="110000">
+                        <div class="store-item-thumbnail">VIDEO</div>
+                        <div class="store-item-info">
+                            <h3 class="store-item-title">Pemahaman Bacaan Bahasa Indonesia</h3>
+                            <p class="store-item-description">Teknik jitu memahami teks bacaan dan menjawab soal dengan tepat</p>
+                            <div class="store-item-bottom">
+                                <span class="store-item-price">Rp 110.000</span>
+                                <div class="store-item-actions">
+                                    <button class="add-to-cart-btn" onclick="addToCart('v2', 'Pemahaman Bacaan Bahasa Indonesia', 'Teknik jitu memahami teks bacaan', 110000, 'video')">+ Keranjang</button>
+                                    <button class="buy-now-btn" onclick="buyNow('v2', 'Pemahaman Bacaan Bahasa Indonesia', 'Teknik jitu memahami teks bacaan', 110000, 'video')">Beli Sekarang</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="store-item" data-id="v3" data-type="video" data-price="115000">
+                        <div class="store-item-thumbnail">VIDEO</div>
+                        <div class="store-item-info">
+                            <h3 class="store-item-title">Master Penalaran Umum</h3>
+                            <p class="store-item-description">Panduan lengkap menaklukkan soal penalaran umum dengan metode analisa cepat</p>
+                            <div class="store-item-bottom">
+                                <span class="store-item-price">Rp 115.000</span>
+                                <div class="store-item-actions">
+                                    <button class="add-to-cart-btn" onclick="addToCart('v3', 'Master Penalaran Umum', 'Panduan lengkap menaklukkan soal penalaran umum', 115000, 'video')">+ Keranjang</button>
+                                    <button class="buy-now-btn" onclick="buyNow('v3', 'Master Penalaran Umum', 'Panduan lengkap menaklukkan soal penalaran umum', 115000, 'video')">Beli Sekarang</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="store-item" data-id="v4" data-type="video" data-price="125000">
+                        <div class="store-item-thumbnail">VIDEO</div>
+                        <div class="store-item-info">
+                            <h3 class="store-item-title">English Comprehension</h3>
+                            <p class="store-item-description">Menguasai soal-soal reading comprehension dan grammar dengan mudah</p>
+                            <div class="store-item-bottom">
+                                <span class="store-item-price">Rp 125.000</span>
+                                <div class="store-item-actions">
+                                    <button class="add-to-cart-btn" onclick="addToCart('v4', 'English Comprehension', 'Menguasai soal-soal reading comprehension dan grammar', 125000, 'video')">+ Keranjang</button>
+                                    <button class="buy-now-btn" onclick="buyNow('v4', 'English Comprehension', 'Menguasai soal-soal reading comprehension dan grammar', 125000, 'video')">Beli Sekarang</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="store-item" data-id="v5" data-type="video" data-price="135000">
+                        <div class="store-item-thumbnail">VIDEO</div>
+                        <div class="store-item-info">
+                            <h3 class="store-item-title">Strategi Jitu SNBT</h3>
+                            <p class="store-item-description">Tips dan strategi dari para alumni yang berhasil masuk PTN favorit</p>
+                            <div class="store-item-bottom">
+                                <span class="store-item-price">Rp 135.000</span>
+                                <div class="store-item-actions">
+                                    <button class="add-to-cart-btn" onclick="addToCart('v5', 'Strategi Jitu SNBT', 'Tips dan strategi dari para alumni', 135000, 'video')">+ Keranjang</button>
+                                    <button class="buy-now-btn" onclick="buyNow('v5', 'Strategi Jitu SNBT', 'Tips dan strategi dari para alumni', 135000, 'video')">Beli Sekarang</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-warning" id="loginAlert" style="display: none;">
+                    Silahkan login terlebih dahulu untuk membeli materi pembelajaran
+                </div>
+            </div>
+            
+            <!-- Cart Tab -->
+            <div class="tab-content" id="cart">
+                <h3 class="section-title">Keranjang Belanja</h3>
+                
+                <div class="cart-container">
+                    <div class="cart-items" id="cartItems">
+                        <!-- Cart items will be added here dynamically -->
+                        <div class="alert alert-warning" id="emptyCartMessage">
+                            Keranjang belanja Anda masih kosong.
+                        </div>
+                    </div>
+                    
+                    <div class="cart-summary" id="cartSummary" style="display: none;">
+                        <h3 class="summary-title">Ringkasan Belanja</h3>
+                        <div class="summary-item">
+                            <span>Subtotal</span>
+                            <span id="subtotal">Rp 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Pajak (11%)</span>
+                            <span id="tax">Rp 0</span>
+                        </div>
+                        <div class="summary-total">
+                            <span>Total</span>
+                            <span id="total">Rp 0</span>
+                        </div>
+                        <button class="checkout-btn" onclick="showTab('checkout')">Lanjut ke Pembayaran</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Checkout Tab -->
+            <div class="tab-content" id="checkout">
+                <h3 class="section-title">Pembayaran</h3>
+                
+                <div class="alert alert-warning" id="emptyCheckoutMessage">
+                    Tidak ada item untuk dibayar. Silakan tambahkan item ke keranjang terlebih dahulu.
+                </div>
+                
+                <div id="checkoutContent" style="display: none;">
+                    <div class="payment-form">
+                        <div class="form-group">
+                            <label class="form-label">Metode Pembayaran</label>
+                            <div class="payment-methods">
+                                <div class="payment-method" data-method="bank" onclick="selectPaymentMethod(this)">
+                                    <div style="font-size: 24px; color: var(--primary-color);">💳</div>
+                                    <div>Transfer Bank</div>
+                                </div>
+                                <div class="payment-method" data-method="va" onclick="selectPaymentMethod(this)">
+                                    <div style="font-size: 24px; color: var(--primary-color);">🏦</div>
+                                    <div>Virtual Account</div>
+                                </div>
+                                <div class="payment-method" data-method="ewallet" onclick="selectPaymentMethod(this)">
+                                    <div style="font-size: 24px; color: var(--primary-color);">📱</div>
+                                    <div>E-Wallet</div>
+                                </div>
+                                <div class="payment-method" data-method="qris" onclick="selectPaymentMethod(this)">
+                                    <div style="font-size: 24px; color: var(--primary-color);">📲</div>
+                                    <div>QRIS</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Transfer Bank Payment Details -->
+                        <div class="payment-details" id="bank-details" style="display: none;">
+                            <div class="alert alert-success">
+                                Silakan transfer ke rekening berikut:
+                                <br><br>
+                                <strong>Bank BCA</strong><br>
+                                No. Rekening: 1234567890<br>
+                                Atas Nama: PT RuangRamy Edukasi
+                            </div>
+                        </div>
+                        
+                        <!-- Virtual Account Payment Details -->
+                        <div class="payment-details" id="va-details" style="display: none;">
+                            <div class="form-group">
+                                <label class="form-label">Pilih Bank</label>
+                                <select class="form-control">
+                                    <option>BCA Virtual Account</option>
+                                    <option>Mandiri Virtual Account</option>
+                                    <option>BNI Virtual Account</option>
+                                    <option>BRI Virtual Account</option>
+                                </select>
+                            </div>
+                            <div class="alert alert-success">
+                                Nomor Virtual Account akan dikirimkan ke email Anda
+                            </div>
+                        </div>
+                        
+                        <!-- E-Wallet Payment Details -->
+                        <div class="payment-details" id="ewallet-details" style="display: none;">
+                            <div class="form-group">
+                                <label class="form-label">Pilih E-Wallet</label>
+                                <select class="form-control">
+                                    <option>GoPay</option>
+                                    <option>OVO</option>
+                                    <option>DANA</option>
+                                    <option>LinkAja</option>
+                                </select>
+                            </div>
+                            <div class="alert alert-success">
+                                Instruksi pembayaran akan dikirimkan ke email Anda
+                            </div>
+                        </div>
+                        
+                        <!-- QRIS Payment Details -->
+                        <div class="payment-details" id="qris-details" style="display: none;">
+                            <div class="alert alert-success">
+                                Scan QRIS berikut dengan aplikasi e-wallet pilihan Anda:
+                                <div style="height: 200px; width: 200px; background-color: #444; margin: 20px auto; display: flex; justify-content: center; align-items: center; color: var(--primary-color); font-weight: bold;">
+                                    QRIS Code
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Nama Lengkap</label>
+                            <input type="text" class="form-control" placeholder="Masukkan nama lengkap">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" placeholder="Masukkan email">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Nomor Telepon</label>
+                            <input type="tel" class="form-control" placeholder="Masukkan nomor telepon">
+                        </div>
+                        
+                        <button class="checkout-btn" onclick="processPayment()">Bayar Sekarang</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div class="success-icon">✅</div>
+            <h3 class="modal-title">Pembayaran Berhasil</h3>
+            <p class="modal-message">Terima kasih atas pembelian Anda. Materi pembelajaran akan segera dikirim ke email yang terdaftar.</p>
+            <button class="modal-button" onclick="closeModal()">Kembali ke Beranda</button>
+        </div>
+    </div>
+    
+    <!-- Direct Buy Modal -->
+    <div class="modal" id="directBuyModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeDirectBuyModal()">&times;</span>
+            <h3 class="quick-buy-title">Pembelian Cepat</h3>
+            
+            <div class="item-preview" id="quickBuyPreview">
+                <!-- Item preview will be added here -->
+            </div>
+            
+            <div class="payment-form">
+                <div class="form-group">
+                    <label class="form-label">Metode Pembayaran</label>
+                    <div class="payment-methods">
+                        <div class="payment-method" data-method="bank" onclick="selectQuickPaymentMethod(this)">
+                            <div style="font-size: 24px; color: var(--primary-color);">💳</div>
+                            <div>Transfer Bank</div>
+                        </div>
+                        <div class="payment-method" data-method="va" onclick="selectQuickPaymentMethod(this)">
+                            <div style="font-size: 24px; color: var(--primary-color);">🏦</div>
+                            <div>Virtual Account</div>
+                        </div>
+                        <div class="payment-method" data-method="ewallet" onclick="selectQuickPaymentMethod(this)">
+                            <div style="font-size: 24px; color: var(--primary-color);">📱</div>
+                            <div>E-Wallet</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Nama Lengkap</label>
+                    <input type="text" class="form-control" placeholder="Masukkan nama lengkap">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" placeholder="Masukkan email">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Nomor Telepon</label>
+                    <input type="tel" class="form-control" placeholder="Masukkan nomor telepon">
+                </div>
+                
+                <button class="checkout-btn" onclick="processQuickBuy()">Bayar Sekarang</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Cart items array
+        let cartItems = [];
+        let isLoggedIn = false;
+        
+        // Show selected tab
+        function showTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Deactivate all tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Activate selected tab button
+            document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
+            
+            // Check if checkout is empty
+            updateCheckoutStatus();
+        }
+        // Menambahkan event listener untuk tombol login
+        document.addEventListener('DOMContentLoaded', function() {
+        // Mengambil tombol login dari navbar
+        const loginBtn = document.querySelector('.login-btn');
+        
+        // Menambahkan event listener untuk tombol login
+        if(loginBtn) {
+            loginBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Mengarahkan ke halaman login (index2.html)
+                window.location.href = 'index2.html';
+            });
+        }
+        
+        // Mengambil tombol logout dari navbar
+        const logoutBtn = document.querySelector('.logout-btn');
+        
+        // Menambahkan event listener untuk tombol logout
+        if(logoutBtn) {
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Arahkan langsung ke halaman logout (index5.html)
+                window.location.href = 'index5.html';
+            });
+        }
+
+        const berandaBtn = document.querySelector('.beranda-btn');
+        
+        // Menambahkan event listener untuk tombol logout
+        if(berandaBtn) {
+            berandaBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Arahkan langsung ke halaman logout (index5.html)
+                window.location.href = 'index3.html#';
+            });
+        }
+
+        const materiBtn = document.querySelector('.materi-btn');
+        
+        // Menambahkan event listener untuk tombol logout
+        if(materiBtn) {
+            materiBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Arahkan langsung ke halaman logout (index5.html)
+                window.location.href = 'index3.html#materi';
+            });
+        }
+
+        const videoBtn = document.querySelector('.video-btn');
+        
+        // Menambahkan event listener untuk tombol logout
+        if(videoBtn) {
+            videoBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Arahkan langsung ke halaman logout (index5.html)
+                window.location.href = 'index3.html#video';
+            });
+        }
+
+        const mentorsBtn = document.querySelector('.mentors-btn');
+        
+        // Menambahkan event listener untuk tombol logout
+        if(mentorsBtn) {
+            mentorsBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Arahkan langsung ke halaman logout (index5.html)
+                window.location.href = 'index3.html#mentors';
+            });
+        }
+
+        const partnersBtn = document.querySelector('.partners-btn');
+        
+        // Menambahkan event listener untuk tombol logout
+        if(partnersBtn) {
+            partnersBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Arahkan langsung ke halaman logout (index5.html)
+                window.location.href = 'index3.html#partners';
+            });
+        }
+        
+        const kontakBtn = document.querySelector('.kontak-btn');
+        
+        // Menambahkan event listener untuk tombol logout
+        if(kontakBtn) {
+            kontakBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Arahkan langsung ke halaman logout (index5.html)
+                window.location.href = 'index3.html#kontak';
+            });
+        }
+        
+        // Kode smooth scrolling yang sudah ada tetap dipertahankan
+        const navLinks = document.querySelectorAll('.nav-links a:not(.login-btn):not(.logout-btn)');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Skip untuk link "Beranda"
+                if(this.getAttribute('href') === '#') return;
+                
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if(targetSection) {
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const targetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });
+
+        
+        // Add item to cart
+        function addToCart(id, title, description, price, type) {
+            // Check if user is logged in
+            if (!isLoggedIn) {
+                document.getElementById('loginAlert').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('loginAlert').style.display = 'none';
+                }, 3000);
+                return;
+            }
+            
+            // Check if item already exists in cart
+            const existingItem = cartItems.find(item => item.id === id);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cartItems.push({
+                    id: id,
+                    title: title,
+                    description: description,
+                    price: price,
+                    type: type,
+                    quantity: 1
+                });
+            }
+            
+            // Update cart UI
+            updateCart();
+            
+            // Show notification
+            alert(`${title} telah ditambahkan ke keranjang!`);
+        }
+        
+        // Buy item directly
+        function buyNow(id, title, description, price, type) {
+            // Check if user is logged in
+            if (!isLoggedIn) {
+                document.getElementById('loginAlert').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('loginAlert').style.display = 'none';
+                }, 3000);
+                return;
+            }
+            
+            // Set quick buy item
+            const quickBuyItem = {
+                id: id,
+                title: title,
+                description: description,
+                price: price,
+                type: type
+            };
+            
+            // Update quick buy preview
+            document.getElementById('quickBuyPreview').innerHTML = `
+                <h4>${title}</h4>
+                <p>${description}</p>
+                <div style="margin-top: 10px; font-weight: bold; color: var(--primary-color);">
+                    Rp ${formatPrice(price)}
+                </div>
+            `;
+            
+            // Show direct buy modal
+            document.getElementById('directBuyModal').style.display = 'flex';
+        }
+        
+        // Remove item from cart
+        function removeFromCart(id) {
+            cartItems = cartItems.filter(item => item.id !== id);
+            updateCart();
+        }
+        
+        // Update cart UI
+        function updateCart() {
+            const cartItemsElement = document.getElementById('cartItems');
+            const emptyCartMessage = document.getElementById('emptyCartMessage');
+            const cartSummary = document.getElementById('cartSummary');
+            
+            // Update cart badge
+            const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = totalQuantity;
+            document.getElementById('cartBadge').textContent = totalQuantity;
+            
+            // Check if cart is empty
+            if (cartItems.length === 0) {
+                emptyCartMessage.style.display = 'block';
+                cartSummary.style.display = 'none';
+                cartItemsElement.innerHTML = emptyCartMessage.outerHTML;
+                return;
+            }
+            
+            // Display cart items
+            emptyCartMessage.style.display = 'none';
+            cartSummary.style.display = 'block';
+            
+            // Generate cart items HTML
+            let cartItemsHTML = '';
+            cartItems.forEach(item => {
+                cartItemsHTML += `
+                    <div class="cart-item">
+                        <div class="item-image">${item.type === 'video' ? 'VIDEO' : 'PDF'}</div>
+                        <div class="item-details">
+                            <h3 class="item-title">${item.title}</h3>
+                            <p class="item-description">${item.description}</p>
+                            <div class="item-price">Rp ${formatPrice(item.price)} × ${item.quantity}</div>
+                        </div>
+                        <button class="remove-btn" onclick="removeFromCart('${item.id}')">×</button>
+                    </div>
+                `;
+            });
+            
+            cartItemsElement.innerHTML = cartItemsHTML;
+            
+            // Update summary
+            const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.11;
+            const total = subtotal + tax;
+            
+            document.getElementById('subtotal').textContent = `Rp ${formatPrice(subtotal)}`;
+            document.getElementById('tax').textContent = `Rp ${formatPrice(tax)}`;
+            document.getElementById('total').textContent = `Rp ${formatPrice(total)}`;
+            
+            // Update checkout status
+            updateCheckoutStatus();
+        }
+        
+        // Update checkout status
+        function updateCheckoutStatus() {
+            const emptyCheckoutMessage = document.getElementById('emptyCheckoutMessage');
+            const checkoutContent = document.getElementById('checkoutContent');
+            
+            if (cartItems.length === 0) {
+                emptyCheckoutMessage.style.display = 'block';
+                checkoutContent.style.display = 'none';
+            } else {
+                emptyCheckoutMessage.style.display = 'none';
+                checkoutContent.style.display = 'block';
+            }
+        }
+        
+        // Select payment method
+        function selectPaymentMethod(element) {
+            // Remove active class from all methods
+            document.querySelectorAll('.payment-method').forEach(method => {
+                method.classList.remove('active');
+            });
+            
+            // Add active class to selected method
+            element.classList.add('active');
+            
+            // Hide all payment details
+            document.querySelectorAll('.payment-details').forEach(details => {
+                details.style.display = 'none';
+            });
+            
+            // Show selected payment details
+            const method = element.dataset.method;
+            document.getElementById(`${method}-details`).style.display = 'block';
+        }
+        
+        // Select quick payment method
+        function selectQuickPaymentMethod(element) {
+            // Remove active class from all methods
+            document.querySelectorAll('#directBuyModal .payment-method').forEach(method => {
+                method.classList.remove('active');
+            });
+            
+            // Add active class to selected method
+            element.classList.add('active');
+        }
+        
+        // Process payment
+        function processPayment() {
+            // Show success modal
+            document.getElementById('successModal').style.display = 'flex';
+            
+            // Clear cart
+            cartItems = [];
+            updateCart();
+        }
+        
+        // Process quick buy
+        function processQuickBuy() {
+            // Close direct buy modal
+            closeDirectBuyModal();
+            
+            // Show success modal
+            document.getElementById('successModal').style.display = 'flex';
+        }
+        
+        // Close modal
+        function closeModal() {
+            document.getElementById('successModal').style.display = 'none';
+            showTab('store');
+        }
+        
+        // Close direct buy modal
+        function closeDirectBuyModal() {
+            document.getElementById('directBuyModal').style.display = 'none';
+        }
+        
+        // Format price
+        function formatPrice(price) {
+            return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+        
+        // Toggle login/logout
+        document.getElementById('loginButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            isLoggedIn = true;
+            this.style.display = 'none';
+            document.getElementById('logoutButton').style.display = 'inline-block';
+            alert('Anda berhasil login!');
+        });
+        
+        document.getElementById('logoutButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            isLoggedIn = false;
+            this.style.display = 'none';
+            document.getElementById('loginButton').style.display = 'inline-block';
+            
+            // Clear cart on logout
+            cartItems = [];
+            updateCart();
+            alert('Anda berhasil logout!');
+        });
+        
+        // Initialize
+        window.onload = function() {
+            updateCart();
+            updateCheckoutStatus();
+        };
+    </script>
+</body>
+</html>
