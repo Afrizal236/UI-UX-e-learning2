@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Guru - Sistem Informasi Akademik Guru</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: #1a73e8;
+            color: white;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+            color: #1a73e8;
+        }
+        
+        .main-content {
+            display: flex;
+            margin-top: 20px;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            padding: 20px;
+            margin-right: 20px;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .menu-item:hover {
+            background-color: #2d2d2d;
+        }
+        
+        .menu-item.active {
+            background-color: #2c3e50;
+            border-left: 4px solid #1a73e8;
+        }
+        
+        .menu-icon {
+            margin-right: 15px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #1a73e8;
+        }
+        
+        .content-area {
+            flex: 1;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            padding: 20px;
+        }
+        
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+            color: #aaa;
+        }
+        
+        .tab.active {
+            border-bottom: 2px solid #1a73e8;
+            color: #1a73e8;
+            font-weight: 600;
+        }
+        
+        .upload-section {
+            background-color: #2d2d2d;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .upload-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .upload-icon {
+            background-color: rgba(26, 115, 232, 0.2);
+            color: #1a73e8;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+        
+        .upload-form {
+            margin-top: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+        
+        input[type="date"] {
+            width: 100%;
+            padding: 9px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+        
+        input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+        
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        .file-input-container input[type="file"] {
+            position: absolute;
+            font-size: 100px;
+            opacity: 0;
+            right: 0;
+            top: 0;
+            cursor: pointer;
+        }
+        
+        .file-input-label {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: rgba(26, 115, 232, 0.2);
+            color: #1a73e8;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-input-label:hover {
+            background-color: rgba(26, 115, 232, 0.3);
+        }
+        
+        .file-name {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #aaa;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background-color: #1558b3;
+        }
+        
+        button.secondary {
+            background-color: transparent;
+            border: 1px solid #1a73e8;
+            color: #1a73e8;
+            margin-right: 10px;
+        }
+        
+        button.secondary:hover {
+            background-color: rgba(26, 115, 232, 0.1);
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
+        .class-selection {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .class-option {
+            padding: 8px 15px;
+            background-color: #333;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .class-option.selected {
+            background-color: rgba(26, 115, 232, 0.2);
+            color: #1a73e8;
+        }
+        
+        .content-tab {
+            display: none;
+        }
+        
+        .content-tab.active {
+            display: block;
+        }
+        
+        .notification-badge {
+            background-color: #e74c3c;
+            color: white;
+            font-size: 12px;
+            border-radius: 50%;
+            padding: 2px 6px;
+            margin-left: 8px;
+        }
+        
+        .preview-area {
+            margin-top: 15px;
+            padding: 15px;
+            border: 1px dashed #444;
+            border-radius: 5px;
+            min-height: 100px;
+            background-color: #222;
+        }
+        
+        .preview-placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sistem Informasi Akademik</h1>
+            <div class="user-info">
+                <div class="user-avatar">G</div>
+                <div>
+                    <div>Budi Santoso</div>
+                    <div style="font-size: 12px; opacity: 0.8;">Guru Matematika</div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="menu-item">
+                    <div class="menu-icon">📊</div>
+                    <div>Dashboard</div>
+                </div>
+                <div class="menu-item active">
+                    <div class="menu-icon">📤</div>
+                    <div>Upload Konten</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">📝</div>
+                    <div>Daftar Tugas <span class="notification-badge">10</span></div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">📋</div>
+                    <div>Nilai Siswa</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">👨‍👦‍👦</div>
+                    <div>Daftar Kelas</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">📅</div>
+                    <div>Jadwal Mengajar</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">📢</div>
+                    <div>Pengumuman</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">📊</div>
+                    <div>Laporan</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">⚙️</div>
+                    <div>Pengaturan</div>
+                </div>
+            </div>
+            
+            <div class="content-area">
+                <div class="content-header">
+                    <h2>Upload Konten Pembelajaran</h2>
+                </div>
+                
+                <div class="tab-container">
+                    <div class="tab active" data-tab="tugas">Upload Tugas</div>
+                    <div class="tab" data-tab="video">Upload Video</div>
+                    <div class="tab" data-tab="materi">Upload Materi</div>
+                </div>
+                
+                <!-- Tab Upload Tugas -->
+                <div class="content-tab active" id="tugas-tab">
+                    <div class="upload-section">
+                        <div class="upload-header">
+                            <div class="upload-icon">📝</div>
+                            <h3>Upload Tugas Baru</h3>
+                        </div>
+                        <p>Upload tugas untuk siswa-siswi Anda. Anda dapat menentukan batas waktu pengumpulan dan kelas yang dituju.</p>
+                        
+                        <div class="upload-form">
+                            <div class="form-group">
+                                <label for="tugas-judul">Judul Tugas</label>
+                                <input type="text" id="tugas-judul" placeholder="Masukkan judul tugas">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="tugas-deskripsi">Deskripsi Tugas</label>
+                                <textarea id="tugas-deskripsi" rows="4" placeholder="Deskripsikan tugas ini dengan jelas"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="tugas-mapel">Mata Pelajaran</label>
+                                <select id="tugas-mapel">
+                                    <option value="">Pilih Mata Pelajaran</option>
+                                    <option value="matematika">Matematika</option>
+                                    <option value="fisika">Fisika</option>
+                                    <option value="biologi">Biologi</option>
+                                    <option value="kimia">Kimia</option>
+                                    <option value="b_indonesia">Bahasa Indonesia</option>
+                                    <option value="b_inggris">Bahasa Inggris</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Kelas yang Dituju</label>
+                                <div class="class-selection">
+                                    <div class="class-option">XII-A</div>
+                                    <div class="class-option selected">XII-B</div>
+                                    <div class="class-option">XII-C</div>
+                                    <div class="class-option selected">XII-D</div>
+                                    <div class="class-option">XII-E</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="tugas-deadline">Batas Waktu Pengumpulan</label>
+                                <input type="date" id="tugas-deadline">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>File Tugas</label>
+                                <div class="file-input-container">
+                                    <label class="file-input-label">
+                                        <i>📎</i> Pilih File
+                                        <input type="file" id="tugas-file">
+                                    </label>
+                                </div>
+                                <div class="file-name" id="tugas-file-name">Belum ada file yang dipilih</div>
+                            </div>
+                            
+                            <div class="button-group">
+                                <button class="secondary">Simpan Draft</button>
+                                <button>Upload Tugas</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab Upload Video -->
+                <div class="content-tab" id="video-tab">
+                    <div class="upload-section">
+                        <div class="upload-header">
+                            <div class="upload-icon">🎬</div>
+                            <h3>Upload Video Pembelajaran</h3>
+                        </div>
+                        <p>Upload video pembelajaran untuk memudahkan siswa memahami materi. Mendukung format MP4, AVI, MKV dengan ukuran maksimal 500MB.</p>
+                        
+                        <div class="upload-form">
+                            <div class="form-group">
+                                <label for="video-judul">Judul Video</label>
+                                <input type="text" id="video-judul" placeholder="Masukkan judul video">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="video-deskripsi">Deskripsi Video</label>
+                                <textarea id="video-deskripsi" rows="4" placeholder="Deskripsikan isi video ini"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="video-mapel">Mata Pelajaran</label>
+                                <select id="video-mapel">
+                                    <option value="">Pilih Mata Pelajaran</option>
+                                    <option value="matematika">Matematika</option>
+                                    <option value="fisika">Fisika</option>
+                                    <option value="biologi">Biologi</option>
+                                    <option value="kimia">Kimia</option>
+                                    <option value="b_indonesia">Bahasa Indonesia</option>
+                                    <option value="b_inggris">Bahasa Inggris</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Kelas yang Dapat Mengakses</label>
+                                <div class="class-selection">
+                                    <div class="class-option selected">X-A</div>
+                                    <div class="class-option selected">X-B</div>
+                                    <div class="class-option selected">X-C</div>
+                                    <div class="class-option">XI-A</div>
+                                    <div class="class-option">XI-B</div>
+                                    <div class="class-option">XII-A</div>
+                                    <div class="class-option">XII-B</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Video Pembelajaran</label>
+                                <div class="file-input-container">
+                                    <label class="file-input-label">
+                                        <i>🎥</i> Pilih Video
+                                        <input type="file" id="video-file" accept="video/*">
+                                    </label>
+                                </div>
+                                <div class="file-name" id="video-file-name">Belum ada video yang dipilih</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Thumbnail Video (Opsional)</label>
+                                <div class="file-input-container">
+                                    <label class="file-input-label">
+                                        <i>🖼️</i> Pilih Thumbnail
+                                        <input type="file" id="thumbnail-file" accept="image/*">
+                                    </label>
+                                </div>
+                                <div class="file-name" id="thumbnail-file-name">Belum ada thumbnail yang dipilih</div>
+                            </div>
+                            
+                            <div class="preview-area">
+                                <div class="preview-placeholder">Preview thumbnail akan ditampilkan di sini</div>
+                            </div>
+                            
+                            <div class="button-group">
+                                <button class="secondary">Simpan Draft</button>
+                                <button>Upload Video</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab Upload Materi -->
+                <div class="content-tab" id="materi-tab">
+                    <div class="upload-section">
+                        <div class="upload-header">
+                            <div class="upload-icon">📄</div>
+                            <h3>Upload Materi Pembelajaran</h3>
+                        </div>
+                        <p>Upload materi pembelajaran dalam format PDF, DOCX, PPT, atau format lainnya untuk mengembangkan pengetahuan siswa.</p>
+                        
+                        <div class="upload-form">
+                            <div class="form-group">
+                                <label for="materi-judul">Judul Materi</label>
+                                <input type="text" id="materi-judul" placeholder="Masukkan judul materi">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="materi-deskripsi">Deskripsi Materi</label>
+                                <textarea id="materi-deskripsi" rows="4" placeholder="Deskripsikan isi materi ini"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="materi-mapel">Mata Pelajaran</label>
+                                <select id="materi-mapel">
+                                    <option value="">Pilih Mata Pelajaran</option>
+                                    <option value="matematika">Matematika</option>
+                                    <option value="fisika">Fisika</option>
+                                    <option value="biologi">Biologi</option>
+                                    <option value="kimia">Kimia</option>
+                                    <option value="b_indonesia">Bahasa Indonesia</option>
+                                    <option value="b_inggris">Bahasa Inggris</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="materi-kategori">Kategori Materi</label>
+                                <select id="materi-kategori">
+                                    <option value="">Pilih Kategori</option>
+                                    <option value="modul">Modul Pembelajaran</option>
+                                    <option value="slide">Slide Presentasi</option>
+                                    <option value="ebook">E-book</option>
+                                    <option value="rangkuman">Rangkuman</option>
+                                    <option value="latihan">Latihan Soal</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Kelas yang Dapat Mengakses</label>
+                                <div class="class-selection">
+                                    <div class="class-option">X-A</div>
+                                    <div class="class-option">X-B</div>
+                                    <div class="class-option">X-C</div>
+                                    <div class="class-option selected">XI-A</div>
+                                    <div class="class-option selected">XI-B</div>
+                                    <div class="class-option selected">XII-A</div>
+                                    <div class="class-option selected">XII-B</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>File Materi</label>
+                                <div class="file-input-container">
+                                    <label class="file-input-label">
+                                        <i>📎</i> Pilih File
+                                        <input type="file" id="materi-file">
+                                    </label>
+                                </div>
+                                <div class="file-name" id="materi-file-name">Belum ada file yang dipilih</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>File Tambahan (Opsional)</label>
+                                <div class="file-input-container">
+                                    <label class="file-input-label">
+                                        <i>📎</i> Pilih File Tambahan
+                                        <input type="file" id="materi-file-tambahan" multiple>
+                                    </label>
+                                </div>
+                                <div class="file-name" id="materi-file-tambahan-name">Belum ada file tambahan yang dipilih</div>
+                            </div>
+                            
+                            <div class="button-group">
+                                <button class="secondary">Simpan Draft</button>
+                                <button>Upload Materi</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching
+            const tabs = document.querySelectorAll('.tab');
+            const contentTabs = document.querySelectorAll('.content-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contentTabs.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to current tab
+                    this.classList.add('active');
+                    document.getElementById(tabId + '-tab').classList.add('active');
+                });
+            });
+            
+            // Class selection
+            const classOptions = document.querySelectorAll('.class-option');
+            classOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                });
+            });
+            
+            // File selection display
+            document.getElementById('tugas-file').addEventListener('change', function() {
+                displayFileName('tugas-file', 'tugas-file-name');
+            });
+            
+            document.getElementById('video-file').addEventListener('change', function() {
+                displayFileName('video-file', 'video-file-name');
+            });
+            
+            document.getElementById('thumbnail-file').addEventListener('change', function() {
+                displayFileName('thumbnail-file', 'thumbnail-file-name');
+                previewImage('thumbnail-file');
+            });
+            
+            document.getElementById('materi-file').addEventListener('change', function() {
+                displayFileName('materi-file', 'materi-file-name');
+            });
+            
+            document.getElementById('materi-file-tambahan').addEventListener('change', function() {
+                const input = document.getElementById('materi-file-tambahan');
+                const fileNameDisplay = document.getElementById('materi-file-tambahan-name');
+                
+                if (input.files.length > 0) {
+                    if (input.files.length === 1) {
+                        fileNameDisplay.textContent = input.files[0].name;
+                    } else {
+                        fileNameDisplay.textContent = `${input.files.length} file dipilih`;
+                    }
+                } else {
+                    fileNameDisplay.textContent = "Belum ada file tambahan yang dipilih";
+                }
+            });
+            
+            // Menu item selection
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Function to display file name
+            function displayFileName(inputId, displayId) {
+                const input = document.getElementById(inputId);
+                const fileNameDisplay = document.getElementById(displayId);
+                
+                if (input.files.length > 0) {
+                    fileNameDisplay.textContent = input.files[0].name;
+                } else {
+                    fileNameDisplay.textContent = "Belum ada file yang dipilih";
+                }
+            }
+            
+            // Function to preview image
+            function previewImage(inputId) {
+                const input = document.getElementById(inputId);
+                const previewArea = document.querySelector('.preview-area');
+                
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        previewArea.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; max-height: 200px;">`;
+                    }
+                    
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    previewArea.innerHTML = '<div class="preview-placeholder">Preview thumbnail akan ditampilkan di sini</div>';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
